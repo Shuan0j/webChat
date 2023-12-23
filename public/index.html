@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebSocket Chat</title>
+</head>
+
+<body>
+  <input type="text" id="userID" placeholder="Enter Your ID">
+  <input type="text" id="messageInput" placeholder="Type a message...">
+  <button onclick="sendMessage()">Send</button>
+  <div id="chat"></div>
+
+  <script>
+    var ws = new WebSocket('ws://192.168.1.113:3000');
+
+    ws.onmessage = (event) => {
+      var chatDiv = document.getElementById('chat');
+      chatDiv.innerHTML += `<p>${event.data}</p>`;
+    };
+
+    function sendMessage() {
+      var userIDinput = document.getElementById('userID');
+      var messageInput = document.getElementById('messageInput');
+      var message = userIDinput.value + ' : ' + messageInput.value;
+
+      var jsonMessage = JSON.stringify({ text: message });
+
+      ws.send(jsonMessage);
+      messageInput.value = '';
+    }
+  </script>
+</body>
+
+</html>
